@@ -1,26 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+	const [inputValue, setInputValue] = useState("");
+	const [todos, setTodos] = useState([]);
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+	return (
+		<div className="container">
+			<h1>Todos</h1>
+			<ul>
+				<li>
+					<input
+						type="text"
+						onChange={(e) => setInputValue(e.target.value)}
+						value={inputValue}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && inputValue.trim() !== "") {
+								setTodos([...todos, inputValue]);
+								setInputValue("");
+							}
+						}}
+						placeholder="What needs to be done?"
+					/>
+				</li>
+				{todos.map((item, index) => (
+					<li key={index}>
+						{item}{" "}
+						<FontAwesomeIcon
+							icon={faTrashCan}
+							onClick={() =>
+								setTodos(todos.filter((_, i) => i !== index))
+							}
+							style={{ cursor: "pointer", color: "red" }}
+						/>
+					</li>
+				))}
+			</ul>
+			<div>{todos.length} items left</div>
 		</div>
 	);
 };
